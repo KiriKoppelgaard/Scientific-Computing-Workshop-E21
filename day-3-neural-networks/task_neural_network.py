@@ -31,7 +31,7 @@ def sigmoid(x: np.ndarray, derivative: bool = False) -> np.ndarray:
 class NeuralNetwork:
     def __init__(self, layers: List[int]):
         """initializes the neural network by creating a weight matrice pr. layer and a bias pr. layer.
-        The bias and wieght are randomly sampled from a Normal(0, 1).
+        The bias and weight are randomly sampled from a Normal(0, 1).
 
         Args:
             layers (List[int]): A list of layers. Where the integers denote the number of nodes in the layer.
@@ -39,10 +39,18 @@ class NeuralNetwork:
                 While the last layer should contain 10 nodes. Corresponding to the number of output classes. Example input:
                 [784, 30, 10]
         """
-        ## init biases
-        # self.biases = ...
-        ## init list of weight matrices
-        # self.weights = ...
+        #### Biases are connected to the nodes, wheres weights are connected to the edges.
+        #### Thus, a weight per connection and a bias per node per layer.  
+        
+        ## init list of weight matrices       
+        self.weights =  [np.random.normal(0, 1, size = (30, 784))
+                        , np.random.normal(0, 1, size = (10, 30))]
+                        
+
+        ## init biases 
+        self.biases = [np.random.normal(0, 1, size = (30, 1))
+                        , np.random.normal(0, 1, size = (10, 1))]
+        self.n_layers = 3
 
     def forward(self, X: np.ndarray) -> np.ndarray:
         """Performs the feedforward pass of the neural network.
@@ -61,7 +69,28 @@ class NeuralNetwork:
             # apply the activation function
         
         # feel free to do this as a for loop if you wish to begin with.
-        pass
+        #A = np.arange(784)
+        
+        for L in range(len(self.biases)):
+            X_L = []
+            b_L = self.biases[L]
+            w_L = self.weights[L]
+
+            # 
+            for n in range(len(b_L)):
+                b_n = b_L[n]
+                w_n = w_L[n]
+               # assert w_n.shape == (784,)
+               # print("w_n shape", w_n.shape)
+                X_L.append(sigmoid(w_n @ X+b_n))
+            X = np.array(X_L)
+        return X
+            #print("X", X)
+            #print("x shape", X.shape)
+
+
+
+
 
     # static methods simply mean that it does not take in self as an argument,
     # thus have not access to the class it is essentially just a function attached to the class
@@ -69,7 +98,7 @@ class NeuralNetwork:
     def cost(
         output: np.ndarray,
         actual: np.ndarray,
-    ) -> float:
+        ) -> float:
         """A cost function, which returns the difference between the output of the
         neural network (e.g. its prediction) and the actual value
 
@@ -86,7 +115,8 @@ class NeuralNetwork:
         Returns:
             np.ndarray: The loss/cost
         """
-        pass
+        return sum((output - actual)**2) / len(output)
+        #pass
 
     def SGD(
         self,
@@ -199,6 +229,12 @@ class NeuralNetwork:
             # do a forward pass
             # compare the output with the answer
         # return number of correct and total number of predictions.
+        
+        #for sample in data: 
+        #    NeuralNetwork.forward(sample)
+
+
+        
         pass
 
 
@@ -210,21 +246,23 @@ if __name__ == "__main__":
     train_data, val_data, test_data = mnist_loader.load_data_wrapper()
 
     ## init your neural network
-    # network = NeuralNetwork([784, 30, 10])
+    network = NeuralNetwork([784, 30, 10])
 
     ## test forward pass on one example
-    # pixels = train_data[0][0] # one example
-    # answer = train_data[0][1]
-    # output = network.forward(X=pixels)
+    pixels = train_data[0][0] # one example
+    #print("pixels", train_data[0][0])
+    answer = train_data[0][1]
+    output = network.forward(X=pixels)
+    #print(output)
 
     ## calculate the cost
-    # cost = network.cost(output, actual=answer)
-
+    cost = network.cost(output, actual=answer)
+    
     ## train using backprop.
     ## (this should be very slow with stachostic gradient descent)
-    # for i in range(10):
-    #     network.backprop(train_data, learning_rate=3)
-    #     print(network.evaluate(val_data))
+ #   for i in range(10):
+ #        network.backprop(train_data, learning_rate=3)
+ #        print(network.evaluate(val_data))
 
     ## train for one epoch
     # network.SGD(train_data=train_data, epochs=1)
