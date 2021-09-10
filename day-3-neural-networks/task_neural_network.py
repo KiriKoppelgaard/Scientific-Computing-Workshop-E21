@@ -297,7 +297,7 @@ if __name__ == "__main__":
     # Setting a random seed for exercise consistency
     np.random.seed(seed=1337)
 
-    train_data, val_data, test_data = mnist_loader.load_data_wrapper()
+    # train_data, val_data, test_data = mnist_loader.load_data_wrapper()
 
     ## init your neural network
     network = NeuralNetwork([784, 30, 10])
