@@ -296,7 +296,7 @@ if __name__ == "__main__":
  #        print(network.evaluate(val_data))
 
     ## train for one epoch
-     network.SGD(train_data=train_data, epochs=1)
+    #network.SGD(train_data=train_data, epochs=1)
     
     ## evaluate the performance:
     # print(network.evaluate(val_data))
