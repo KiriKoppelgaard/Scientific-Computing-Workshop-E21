@@ -29,6 +29,29 @@ def sigmoid(x: np.ndarray, derivative: bool = False) -> np.ndarray:
     return 1 / (1 + np.exp(-x))
 
 
+def chunks(l, n):
+    """
+    Creating a iterator which yield successive n-sized chunks from the list, l.
+
+    This function is heavily inspired by the following blogpost:
+    https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks
+
+    Examples:
+    >>> L = [(1,2), (1,2), (1,2), (3,3), (3,3), (3,3), (3,3)]
+    >>> output = chunks(L, 2)
+    >>> max([len(x) for x in output])
+    2
+    """
+    try:
+        assert float(n) % 1 == 0, "n is not a whole number"
+    except ValueError:
+        "Make sure n is a whole number"
+    assert isinstance(l, list), "Make sure that l is a list"
+
+    for i in range(0, len(l), n):
+        yield l[i : (i + n)]
+
+
 
 class NeuralNetwork:
     def __init__(self, layers: List[int]):
