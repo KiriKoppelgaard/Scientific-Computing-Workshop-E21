@@ -5,6 +5,7 @@ from typing import List, Tuple
 
 import numpy as np
 import mnist_loader
+import random
 
 
 def sigmoid(x: np.ndarray, derivative: bool = False) -> np.ndarray:
@@ -26,6 +27,7 @@ def sigmoid(x: np.ndarray, derivative: bool = False) -> np.ndarray:
     if derivative:
         return sigmoid(x) * (1 - sigmoid(x))
     return 1 / (1 + np.exp(-x))
+
 
 
 class NeuralNetwork:
@@ -88,10 +90,6 @@ class NeuralNetwork:
             #print("X", X)
             #print("x shape", X.shape)
 
-
-
-
-
     # static methods simply mean that it does not take in self as an argument,
     # thus have not access to the class it is essentially just a function attached to the class
     @staticmethod
@@ -150,7 +148,29 @@ class NeuralNetwork:
             # create batches of data
             # backprop the given batch
             # (optional: print performance on validation)
-        pass
+        #Kenneths løsning
+        
+
+        # Copying the data in as to not reorder the original data,
+        # keeping the same name for readability.
+        train_data = train_data[:]
+
+        for epoch in range(epochs):
+            print(f"\n Epoch: {(epoch+1)}/{epochs}", end="")
+            random.shuffle(train_data)  # Using a Fisher Yates Shuffle
+
+            batches = chunks(train_data, batch_size)
+
+            # Note that instead of looping through each batch, you could have
+            # a more effective approach would be to consider each batch as a
+            # vector in a matrix, and from here simply use matrix
+            # multiplication
+            for batch in batches:
+                # Apply backpergation using gradient descent for each batch
+                self.backprop(batch, learning_rate)
+            print()
+
+        print("\n Process complete")
 
     def backprop(self, batch, learning_rate: float) -> None:
         """
@@ -233,9 +253,20 @@ class NeuralNetwork:
         #for sample in data: 
         #    NeuralNetwork.forward(sample)
 
-
+        #Kenneths løsning
         
-        pass
+        # creates a 2 by n matrix, where n is the length of the test_data
+        # where the second column indicates the right answer
+        # Note that there is a restructering for the train_data due to the
+        # different structures of train and test_data
+        predictions = np.array(
+            [(np.argmax(self.forward(pixels)), answer) for pixels, answer in data]
+        )
+
+        n_correct = sum(predictions[:, 0] == predictions[:, 1])
+
+        return (n_correct, len(predictions))
+
 
 
 if __name__ == "__main__":
@@ -265,7 +296,7 @@ if __name__ == "__main__":
  #        print(network.evaluate(val_data))
 
     ## train for one epoch
-    # network.SGD(train_data=train_data, epochs=1)
+     network.SGD(train_data=train_data, epochs=1)
     
     ## evaluate the performance:
     # print(network.evaluate(val_data))
