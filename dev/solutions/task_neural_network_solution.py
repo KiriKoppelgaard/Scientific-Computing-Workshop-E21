@@ -1,6 +1,10 @@
 """
 Fully connected feedforward neural network
 """
+import os
+# Change the current working directory
+os.chdir('/work/NLP/Scientific-Computing-Workshop-E21')
+
 import sys
 sys.path.append("day-3-neural-networks")
 from typing import List, Tuple
@@ -9,6 +13,7 @@ import numpy as np
 import mnist_loader
 
 import random
+
 
 
 def sigmoid(x: np.ndarray, derivative: bool = False) -> np.ndarray:
@@ -105,6 +110,7 @@ class NeuralNetwork:
     # static methods simply mean that it does not take in self as an argument,
     # thus have not access to the class it is essentially just a function attached to the class
     @staticmethod
+
     def cost(
         output: np.ndarray,
         actual: np.ndarray,
@@ -139,6 +145,8 @@ class NeuralNetwork:
         Loops through the number of epochs, splitting to training data into
         evenly sized chunk of size n, where n is the batch size. Then loops
         over each of these and applying Backpropergation (BP).
+
+        An epoch is "the number of passes of the entire training dataset the machine learning algorithm has completed"
 
         Lastly if a test data is given it evaluates the network performance on
         the testdata using the eval() function
@@ -262,33 +270,32 @@ if __name__ == "__main__":
     # Setting a random seed for exercise consistency
     np.random.seed(seed=1337)
 
+    #Defining data for NN
     train_data, val_data, test_data = mnist_loader.load_data_wrapper()
+    
 
     ## init your neural network
     # network = NeuralNetwork(...)
-    network = NeuralNetwork([784, 30, 10])
-    print("init works!")
+    network = NeuralNetwork([784, 30, 10]) #Defining nodes in layers 
 
-    ## test forward pass on one example
-    pixels = train_data[0][0] # one example
-    answer = train_data[0][1]
-    output = network.forward(X=pixels)
-    print(output)
+    ## test forward: pass on one example
+    #pixels = train_data[0][0] # one example
+    #answer = train_data[0][1]
+    #output = network.forward(X=pixels)
+    #print(output)
 
 
     ## calculate the cost
     # cost = network.cost(output, actual=answer)
-    # cost = network.cost(output, actual=answer)
 
     ## train using backprop.
-    ## (this should be very slow with stachostic gradient descent)
-    for i in range(10):
-        network.backprop(train_data, learning_rate=3)
-        print(network.evaluate(val_data))
+    ## (this should be very slow with stachostic gradient descent) ##Hvad er forskellen på SGD og backprop?
+    #for i in range(10):
+    #    network.backprop(train_data, learning_rate=3)
+    #    print(network.evaluate(val_data))
 
     ## train for one epoch
-    # network.SGD(train_data=train_data, epochs=1)
-    # network.SGD(train_data=train_data, epochs=1)
+    network.SGD(train_data=train_data, learning_rate=3, epochs=10)
     
     ## evaluate the performance:
-    # print(network.evaluate(val_data))
+    print(network.evaluate(val_data))
