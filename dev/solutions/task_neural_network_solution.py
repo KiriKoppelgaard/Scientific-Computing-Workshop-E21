@@ -281,7 +281,7 @@ if __name__ == "__main__":
     ## test forward: pass on one example
     #pixels = train_data[0][0] # one example
     #answer = train_data[0][1]
-    #output = network.forward(X=pixels)
+    #output = network.forward(X=pixels) #
     #print(output)
 
 
