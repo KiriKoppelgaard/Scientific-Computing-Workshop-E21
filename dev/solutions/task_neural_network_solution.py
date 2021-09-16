@@ -2,19 +2,14 @@
 Fully connected feedforward neural network
 """
 import os
-# Change the current working directory
-os.chdir('/work/NLP/Scientific-Computing-Workshop-E21')
-
 import sys
-sys.path.append("day-3-neural-networks")
 from typing import List, Tuple
-
 import numpy as np
-import mnist_loader
-
 import random
 
 
+sys.path.append(os.path.join("NLP", "a1-getting-started-study-group-5-du-for-nem","Scientific-Computing-Workshop-E21","day-3-neural-networks"))
+import mnist_loader
 
 def sigmoid(x: np.ndarray, derivative: bool = False) -> np.ndarray:
     """
@@ -290,12 +285,12 @@ if __name__ == "__main__":
 
     ## train using backprop.
     ## (this should be very slow with stachostic gradient descent) ##Hvad er forskellen på SGD og backprop?
-    #for i in range(10):
-    #    network.backprop(train_data, learning_rate=3)
-    #    print(network.evaluate(val_data))
+    for i in range(10):
+        network.backprop(train_data, learning_rate=3)
+        print(network.evaluate(val_data))
 
     ## train for one epoch
-    network.SGD(train_data=train_data, learning_rate=3, epochs=10)
+    #network.SGD(train_data=train_data, learning_rate=3, epochs=10)
     
     ## evaluate the performance:
-    print(network.evaluate(val_data))
+    #print(network.evaluate(val_data))
